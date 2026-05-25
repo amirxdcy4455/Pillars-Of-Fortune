@@ -1,119 +1,95 @@
-  [![](https://poggit.pmmp.io/shield.state/Pillars)](https://poggit.pmmp.io/p/Pillars)
+[![](https://poggit.pmmp.io/shield.state/Pillars)](https://poggit.pmmp.io/p/Pillars)
 
 # Pillars of Fortune
 
 <img width="1366" height="687" alt="Screenshot 2025-08-28 125714" src="https://github.com/user-attachments/assets/000d3252-61b3-4ace-abc8-ea76b3735903" />
 
-
-**Pillars of Fortune** is an exciting Minecraft Bedrock minigame plugin that delivers fast-paced, competitive gameplay to your server. Developed by **TheWindows**, this plugin is currently in **beta (v1.0.2)** and provides managing dynamic game worlds, interactive forms, scoreboards, and NPCs. Whether you're a player diving into thrilling battles or an admin crafting unique experiences, Pillars of Fortune is designed for you!
+**Pillars of Fortune** is an exciting Minecraft Bedrock minigame plugin for PocketMine-MP. Players fight to be the last one standing across dynamically created and reset game worlds. Developed by **TheWindows** and **Doma**, now on **v2.0.0** with major improvements to world management, spectating, scoreboards, and configuration.
 
 ## Features
 
-- **Dynamic Game Worlds**: Create and manage multiple game maps with flexible player counts and configurations.
-- **Interactive UI**: Powered by FormAPI, players can navigate intuitive menus to join or manage games effortlessly.
-- **Scoreboard Integration**: Utilize ScoreHud to display real-time stats like wins (`{pillars.wins}`) and coins (`{pillars.coins}`).
-- **Boss Bar Support**: Leverage the apibossbar virion for engaging in-game notifications and status updates.
-- **NPC Management**: Admins can create, list, and remove NPCs to enhance gameplay immersion.
-- **Flexible Commands**: A comprehensive command system with partial command matching for ease of use.
-- **Beta Development**: Actively maintained with a focus on stability and community-driven improvements.
+- **Interactive UI**: Powered by FormAPI, players can join games, spectate, view stats, and access the market through intuitive menus.
+- **Scoreboard Integration**: Built-in scoreboard system with fully customizable lines and placeholders for lobby, waiting, game, and spectator states.
+- **Boss Bar Support**: Uses the apibossbar virion to show item drop countdowns during games.
+- **NPC Management**: Admins can create, list, and remove NPCs that open the game menu when hit.
+- **Spectator System**: Players can spectate active games from the lobby or after dying, with a compass to teleport to alive players.
+- **Flexible Commands**: A full command system with short aliases for quick access.
+- **JSON & MySQL Support**: Choose your database provider in `config.yml`. Falls back to JSON automatically if MySQL fails.
 
 ## Requirements
 
-To run Pillars of Fortune smoothly, install the following dependencies:
+- PocketMine-MP API 5
 
-- **FormAPI**: Enables interactive form-based menus.
-- **MultiWorld**: Supports multiple game worlds for diverse gameplay.
-- **ScoreHud**: Displays dynamic player stats on scoreboards.
-- **DEVirion**: Provides virion support for additional functionality.
-- **apibossbar Virion**: Adds immersive boss bar features.
-
-> **Note**: Ensure the lobby world is named `world` and set as the default in `server.properties`.
+> **Note**: The lobby world name defaults to `world`. Change it in `config.yml` if needed.
 
 ## Installation
 
 1. Download the latest release from [GitHub Releases](https://github.com/TheWindows/Pillars-of-Fortune/releases).
-2. Install the required dependencies listed above.
-3. Place the plugin file in your server's `plugins` folder.
-4. Configure the plugin via `config.yml` in the `plugin_data/Pillars` folder.
-5. Restart your server to load the plugin.
-
-> **Pro Tip**: Customize settings in `config.yml` to tailor the plugin to your server's needs.
+2. Place the plugin `.phar` in your server's `plugins/` folder.
+3. Start the server once to generate config files.
+4. Use `/pillars admin` in-game to create a game and set spawn points.
 
 ## Commands
-
-Pillars of Fortune provides a rich command system, accessible via `/pillars` or its alias `/p`. Below is a detailed list:
 
 ### Player Commands
 | Command | Description | Permission |
 |---------|-------------|------------|
-| `/pillars join [map]` | Join a specific game or open the game menu if no map is specified. | `pillars.join` |
-| `/pillars leave` | Leave the current game. | `pillars.join` |
-| `/pillars list` | List all available games with player counts and status. | `pillars.join` |
-| `/pillars info` | Display plugin details, including version, authors, and game stats. | `pillars.join` |
+| `/pillars` | Open the game menu | `pillars.join` |
+| `/pillars join [map]` | Join a specific game or open the game menu | `pillars.join` |
+| `/pillars leave` | Leave the current game | `pillars.join` |
+| `/pillars list` | List all active games with player counts and status | `pillars.join` |
+| `/pillars stats` | View your personal stats | `pillars.join` |
+| `/pillars info` | Show plugin version, authors, and active game count | `pillars.join` |
 
 ### Admin Commands
 | Command | Description | Permission |
 |---------|-------------|------------|
-| `/pillars admin` | Open the admin settings menu for game management. | `pillars.admin` |
-| `/pillars npc create` | Create a new NPC at your location. | `pillars.admin` |
-| `/pillars npc list` | List all NPCs with their details (world, position, scale). | `pillars.admin` |
-| `/pillars npc remove <id>` | Remove an NPC by its ID. | `pillars.admin` |
-| `/pillars npc removeall` | Remove all NPCs from the server. | `pillars.admin` |
-| `/pillars reset <map>` | Reset a specific game map to its original state. | `pillars.admin` |
-| `/pillars reset all` | Reset all game maps to their original states. | `pillars.admin` |
+| `/pillars admin` | Open the admin settings menu | `pillars.admin` |
+| `/pillars npc create` | Spawn an NPC at your location | `pillars.admin` |
+| `/pillars npc list` | List all NPCs with positions | `pillars.admin` |
+| `/pillars npc remove <id>` | Remove an NPC by index | `pillars.admin` |
+| `/pillars npc removeall` | Remove all NPCs | `pillars.admin` |
+| `/pillars reset <map\|all>` | Reset a map or all maps to their original state | `pillars.admin` |
 
-> **Tip**: Use partial commands (e.g., `/p j` for `/pillars join`) for quicker access!
+> Alias: `/p` — e.g. `/p j` for join, `/p l` for leave.
 
 ## Permissions
 
-The plugin uses a simple permission system to control command access:
-
 | Permission | Description | Default |
 |------------|-------------|---------|
-| `pillars.join` | Allows access to basic commands (`join`, `leave`, `list`, `info`). | `true` (all players) |
-| `pillars.admin` | Grants access to admin commands (`admin`, `npc`, `reset`). | `op` (operators only) |
+| `pillars.join` | Access to basic player commands | `true` |
+| `pillars.admin` | Access to admin commands | `op` |
 
-## Beta Notice
+## Map Setup
 
-Pillars of Fortune is in **beta (v1.0.2)**. While we aim for stability, some features may be incomplete or unstable. Your feedback is crucial for improvement!
+1. Build your map and place it in the server `worlds/` folder.
+2. Run `/pillars admin` → **Create Game**, enter the world name and settings.
+3. Use the **Spawn Wand** (Blaze Rod) to place spawn points by right-clicking blocks.
+4. The map is automatically saved as a template and restored after every game.
 
-- **Report Bugs**: Submit issues at [GitHub Issues](https://github.com/TheWindows/Pillars-of-Fortune/issues).
-- **Get Support**: Join our community on Discord (Username: **TheWindowsJava**).
+## Scoreboard Placeholders
 
-## ScoreHud Integration
+Configure scoreboard lines in `config.yml` using these placeholders:
 
-Enhance your server with dynamic scoreboards using these tags:
-
-- `{pillars.wins}`: Displays the player's total wins.
-- `{pillars.coins}`: Shows the player's coin balance.
-
-Configure ScoreHud to include these tags for a personalized experience.
-
-## Game World Setup
-
-- Store game maps in the `resources/Maps` folder.
-- Use `/pillars reset <map>` to restore maps to their original state.
-- Ensure maps are properly configured in the plugin's settings.
+`{player_name}` `{player_coins}` `{player_wins}` `{player_kills}` `{player_deaths}` `{player_kdr}` `{online_players}` `{game_id}` `{game_players}` `{game_max_players}` `{game_min_players}` `{game_time_left}` `{date}` `{time}`
 
 ## Contributing
 
-We welcome contributions to improve Pillars of Fortune! Here's how to get involved:
+1. Fork the repository from [GitHub](https://github.com/TheWindows/Pillars-of-Fortune).
+2. Submit pull requests for features, fixes, or documentation.
+3. Report bugs via [GitHub Issues](https://github.com/TheWindows/Pillars-of-Fortune/issues).
+4. Reach out on Discord: **TheWindowsJava** or **am2ma**.
 
-1. **Fork the Repository**: Clone the project from [GitHub](https://github.com/TheWindows/Pillars-of-Fortune).
-2. **Submit Pull Requests**: Add features, fix bugs, or enhance documentation.
-3. **Report Issues**: Share bugs or suggestions via [GitHub Issues](https://github.com/TheWindows/Pillars-of-Fortune/issues).
-4. **Join the Community**: Connect on Discord (Username: **TheWindowsJava**) to discuss ideas.
-
-## Acknowledgments
-
-A huge thank you to our community for supporting **Pillars of Fortune**! Your feedback fuels this project. Special thanks to **TheWindows** for creating this exciting plugin.
-
-> **© 2025 TheWindows. All Rights Reserved.**
 
 ## Contact
 
-For support or inquiries, reach out on:
-- **Discord**: TheWindowsJava
-- **GitHub**: [TheWindows](https://github.com/TheWindows)
+### TheWindows
+- Discord: TheWindowsJava
+- GitHub: [TheWindows](https://github.com/TheWindows)
 
-Thank you for choosing **Pillars of Fortune**! 🚀
+### Doma
+- Discord: am2ma
+- GitHub: [Doma-0609](https://github.com/Doma-0609)
+- Telegram: [xIsGod](https://t.me/xIsGod)
+
+> **© 2025 TheWindows. All Rights Reserved.** 
