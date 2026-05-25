@@ -7,3 +7,5 @@ projects:
     libs:
       - src: jojoe77777/FormAPI/libFormAPI
         version: ^2.1.1
+      - src: inxomnyaa/apibossbar/apibossbar
+        version: ^0.2.0
