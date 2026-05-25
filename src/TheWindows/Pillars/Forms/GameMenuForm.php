@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace TheWindows\Pillars\Forms;
 
 use jojoe77777\FormAPI\SimpleForm;
@@ -6,46 +7,36 @@ use pocketmine\player\Player;
 use TheWindows\Pillars\Main;
 
 class GameMenuForm {
-    
+
     public static function createForm(Main $plugin, Player $player): SimpleForm {
-        $form = new SimpleForm(function(Player $player, $data) use ($plugin) {
-            if($data === null) return;
-            
-            $gameManager = $plugin->getGameManager();
-            $availableGames = $gameManager->getAvailableGames();
-            
-            if(isset($availableGames[$data])) {
-                $gameId = $availableGames[$data]['id'];
-                $gameManager->addPlayerToGame($player, $gameId);
+        $form = new SimpleForm(function (Player $player, $data) use ($plugin) {
+            if ($data === null) {
+                return;
             }
+            match ($data) {
+                0 => $plugin->getGameManager()->findOrCreateGame($player),
+                1 => $player->sendForm(LeaderboardForm::createForm($plugin, $player)),
+                2 => $player->sendForm(StatsForm::createForm($plugin, $player)),
+                default => null,
+            };
         });
-        
-        $form->setTitle("§4§lPillars Minigame");
-        $form->setContent("§8Select a game to join:");
-        
-        $gameManager = $plugin->getGameManager();
-        $availableGames = $gameManager->getAvailableGames();
-        
-        if(empty($availableGames)) {
-            $form->addButton("§cNo games available\n§8Create one first");
-        } else {
-            foreach($availableGames as $index => $game) {
-                $players = $game['players'];
-                $maxPlayers = $game['max_players'];
-                $status = $game['status'];
-                
-                
-                $color = "§c"; 
-                if ($players >= $maxPlayers) {
-                    $color = "§4"; 
-                } elseif ($players >= $maxPlayers * 0.7) {
-                    $color = "§6"; 
-                }
-                
-                $form->addButton("{$color}{$game['world']}\n§8{$players}/{$maxPlayers} players §7- {$status}");
-            }
-        }
-        
+
+        $session = $plugin->getSessionManager()->get($player);
+        $wins = $session?->getWins() ?? 0;
+        $kills = $session?->getKills() ?? 0;
+        $games = $plugin->getGameManager()->getAvailableGames();
+        $waitingCount = count(array_filter($games, fn($g) => str_starts_with($g['status'], '§a')));
+
+        $form->setTitle('§4§lPillars of Fortune');
+        $form->setContent(
+            "§8--------------------\n" .
+            "§aWaiting games: §f{$waitingCount}\n" .
+            "§6Your wins: §f{$wins} §8| §6Kills: §f{$kills}\n" .
+            "§8--------------------"
+        );
+        $form->addButton("§aQuick Join\n§7Find or create a game");
+        $form->addButton("§eLeaderboards\n§7Top players");
+        $form->addButton("§bStats\n§7Your statistics");
         return $form;
     }
 }

@@ -1,59 +1,115 @@
-# ====================================================
-#   Pillars of Fortune (v1.0.2 Beta)
-#   Developed by TheWindows
-#   © 2025 TheWindows. All Rights Reserved.
-# ====================================================
+# The name of the world players spawn in when not in a game
+lobby-world: world
 
-# === Plugin Requirements ===
-# To ensure proper functionality, please install:
-# - FormAPI    → Enables interactive forms
-# - ScoreHud   → Displays player scoreboards
-# - DEVirion   → Provides virion support
-#
-# Required Virion:
-# - apibossbar → Enables boss bar functionality
-
-# === Server Setup ===
-# The lobby world must be named "world"
-# and set as the default world in server.properties.
-
-# === ScoreHud Integration ===
-# This plugin includes ScoreHud tags for dynamic displays:
-# - Wins   → {pillars.wins}
-# - Coins  → {pillars.coins}
-
-# === Beta Notice ===
-# This plugin is currently in beta.
-# Some features may be unstable or incomplete.
-# Please report bugs to help improve development.
-
-# === Bug Reporting ===
-# Report issues at:
-# https://github.com/TheWindows
-
-# === Support ===
-# For assistance, contact us on Discord:
-#   Username → TheWindowsJava
-
-# === Appreciation ===
-# Thank you for installing Pillars of Fortune!
-# Your support helps make this project better.
-
-# === Configuration ===
-# Place your custom configuration settings below:
+# Database settings
+# provider: json | mysql
+database:
+  provider: json
+  mysql:
+    host: 127.0.0.1
+    port: 3306
+    user: root
+    password: ""
+    database: pillars
 
 settings:
+  # Particle effects shown around NPCs
+  # style options: rotating_ring | spiral | double_helix | pulse | rain | crown
   npc_particles:
     enabled: true
     style: rotating_ring
     color: 7
     speed: 5
     density: 6
-  
+
+  # Lobby hotbar items — change name and slot as needed
   game_menu:
     slot: 0
-    name: "§4Game Menu §7(Right Click)"
-    
+    name: "§r§4Game Menu §7[Use]"
   market:
     slot: 8
-    name: "§d§lMarket §7(Right Click)"
+    name: "§r§dMarket §7[Use]"
+  spectate_map:
+    slot: 4
+    name: "§r§eSpectate Map §7[Use]"
+
+# Scoreboard settings
+# update-interval: how often the scoreboard refreshes (in ticks, 20 = 1 second)
+# Available placeholders:
+#   {player_name}, {player_coins}, {player_wins}, {player_kills},
+#   {player_deaths}, {player_kdr}, {online_players},
+#   {game_id}, {game_players}, {game_max_players}, {game_min_players},
+#   {game_time_left}, {date}, {time}
+scoreboard:
+  enabled: true
+  update-interval: 20
+
+  lobby:
+    enabled: true
+    title: "§6§lPILLARS"
+    date-format: "Y/m/d"
+    time-format: "H:i:s"
+    datetime-format: "Y/m/d H:i:s"
+    lines:
+      - "§8§m──────────────"
+      - " §fHello §e{player_name}§f!"
+      - "§8§m──────────────"
+      - " §7Online: §a{online_players}"
+      - " §7Coins: §e{player_coins}"
+      - " §7Wins: §b{player_wins}"
+      - " §7Kills: §c{player_kills}"
+      - " §7KDR: §d{player_kdr}"
+      - "§8§m──────────────"
+      - " §e{date}"
+      - " §b{time}"
+      - "§8§m──────────────"
+
+  waiting:
+    enabled: true
+    title: "§e§lWAITING"
+    date-format: "Y/m/d"
+    time-format: "H:i:s"
+    datetime-format: "Y/m/d H:i:s"
+    lines:
+      - "§8§m──────────────"
+      - " §fMap: §a{game_id}"
+      - " §fPlayers: §e{game_players}§7/§e{game_max_players}"
+      - " §fMin: §c{game_min_players}"
+      - " §fStatus: §bWaiting..."
+      - "§8§m──────────────"
+      - " §e{date} §b{time}"
+      - "§8§m──────────────"
+
+  game:
+    enabled: true
+    title: "§c§lPILLARS"
+    date-format: "Y/m/d"
+    time-format: "H:i"
+    datetime-format: "Y/m/d H:i"
+    lines:
+      - "§8§m──────────────"
+      - " §fMap: §a{game_id}"
+      - " §fPlayers: §e{game_players}"
+      - "§8§m──────────────"
+      - " §fKills: §c{player_kills}"
+      - " §fDeaths: §7{player_deaths}"
+      - " §fKDR: §d{player_kdr}"
+      - " §fCoins: §6{player_coins}"
+      - "§8§m──────────────"
+      - " §cTime: §f{game_time_left}"
+      - "§8§m──────────────"
+
+  spectator:
+    enabled: true
+    title: "§7§lSPECTATOR"
+    date-format: "Y/m/d"
+    time-format: "H:i:s"
+    datetime-format: "Y/m/d H:i:s"
+    lines:
+      - "§8§m──────────────"
+      - " §7Map: §f{game_id}"
+      - " §7Players: §e{game_players}"
+      - " §7Time Left: §f{game_time_left}"
+      - "§8§m──────────────"
+      - " §e{date} §b{time}"
+      - "§8§m──────────────"
